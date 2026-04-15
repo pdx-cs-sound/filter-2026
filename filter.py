@@ -6,6 +6,8 @@ name = sys.argv[1]
 
 # Read the file into x yielding frame rate fr (samples/sec).
 (fr, x) = wav.read(name)
+# Check for format, for simplicity.
+assert x.dtype == np.int16, "requires 16-bit signed samples"
 # Convert to float samples, single channel, scaled to -1..1.
 x = np.mean(x.astype(np.float32), axis=1) / 32768.0
 
