@@ -2,7 +2,10 @@ import sys
 import numpy as np
 import scipy.io.wavfile as wav
 
+# Filename.
 name = sys.argv[1]
+# Coefficients.
+a = np.array([float(a) for a in sys.argv[2:]], dtype=np.float32)
 
 # Read the file into x yielding frame rate fr (samples/sec).
 (fr, x) = wav.read(name)
@@ -15,7 +18,6 @@ x = np.mean(x.astype(np.float32), axis=1) / 32768.0
 # y = np.array([1.0 * x[i] - 0.5 * x[i-1] for i in range(1, len(x))], dtype=np.float32)
 
 # Do the convolution with numpy. Much faster.
-a = np.array([0.5, 0.5])
 y = np.convolve(x, a)
 
 # Convert the output to signed 16-bit integers.
