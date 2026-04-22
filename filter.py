@@ -11,10 +11,11 @@ ap.add_argument("--algorithm", choices=["ma", "firwin"], default="firwin")
 ap.add_argument("--cascade", type=int, default=1)
 ap.add_argument("--plot", action="store_true")
 ap.add_argument("--downsample", action="store_true")
+ap.add_argument("--upsample", action="store_true")
 ap.add_argument("wav", nargs="?")
 args = ap.parse_args()
 
-if args.downsample:
+if args.downsample or args.upsample:
     assert args.algorithm == "firwin"
     args.order = 256
 
@@ -44,9 +45,16 @@ if args.plot:
 # Check for format, for simplicity.
 assert x.dtype == np.int16, "requires 16-bit signed samples"
 # Convert to float samples, single channel, scaled to -1..1.
-x = x.astype(np.float32) / 32768.0
 if x.ndim > 1:
-    x = np.mean(x)
+    x = np.mean(x.astype(np.float32), axis=1) / 32768.0
+else:
+    x = x.astype(np.float32) / 32768.0
+
+if args.upsample:
+    y = np.zeros(len(x) * 2, dtype=np.float32)
+    y[::2] = x
+    x = y
+    fr *= 2
 
 # Do the convolution with numpy. Much faster.
 for _ in range(args.cascade):
