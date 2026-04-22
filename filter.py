@@ -5,9 +5,10 @@ import scipy.io.wavfile as wav
 import scipy.signal as signal
 
 ap = argparse.ArgumentParser()
-ap.add_argument("--order", type=int, default=2)
-ap.add_argument("--cutoff", type=float, default=0.5)
-ap.add_argument("--algorithm", choices=["ma", "firwin"], default="firwin")
+ap.add_argument("--order", type=int)
+ap.add_argument("--cutoff", type=float)
+ap.add_argument("--transition", type=float)
+ap.add_argument("--algorithm", choices=["ma", "firwin", "remez"])
 ap.add_argument("--cascade", type=int, default=1)
 ap.add_argument("--plot", action="store_true")
 ap.add_argument("--downsample", action="store_true")
@@ -24,6 +25,11 @@ if args.algorithm == "ma":
     a = [1.0/order] * order
 elif args.algorithm == "firwin":
     a = signal.firwin(args.order, cutoff=args.cutoff)
+elif args.algorithm == "remez":
+    tstart = args.cutoff - args.transition / 2
+    tend = args.cutoff + args.transition / 2
+    print(tstart, tend)
+    a = signal.remez(args.order, [0, tstart / 2, tend / 2, 0.5], [1, 0])
 else:
     assert False, "unknown algorithm"
 
