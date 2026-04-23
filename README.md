@@ -52,7 +52,7 @@ they will do.
 
 ## Parks-McLellan FIR (Remez Exchange)
 
-* Remez filter with fairly flat passband and stopband,
+* FIR filter with fairly flat passband and stopband,
   narrow transition region.
 
   ```
@@ -63,4 +63,13 @@ they will do.
 
   ```
   --algorithm remez --cutoff 0.5 --order 256 --transition 0.01
+  ```
+
+## IIR (Chebyshev Type II)
+
+* Flat passband, fairly sharp transition band and great
+  stopband rejection from a lowish-order filter.
+
+  ```
+  --algorithm cheby2 --cutoff 0.5 --stop-db 100 --order 16
   ```
