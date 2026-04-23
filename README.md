@@ -8,7 +8,11 @@ filtering. Provides plots of filter response.
 ## Examples
 
 Run these on a signal file, or with `--plot` to see what
-they will do.
+they will do. Generate white noise with
+
+```
+sox -n -r 48000 -b 16 -t wav -c 1 noise.wav synth 5 noise white gain -3
+```
 
 ### Moving Average
 
